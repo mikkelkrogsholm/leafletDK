@@ -1,0 +1,18 @@
+Package: leafletDK
+Type: Package
+Title: Creates dynamic maps of danish administrative areas in Leaflet
+Version: 0.1.0
+Author: Mikkel Freltoft Krogsholm
+Maintainer: Mikkel Freltoft Krogsholm <mikkel@56n.dk>
+Description: 
+License: MIT
+LazyData: TRUE
+RoxygenNote: 5.0.1
+Imports:
+    dplyr,
+    leaflet,
+    stringr,
+    sp
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
