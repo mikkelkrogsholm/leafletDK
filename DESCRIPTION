@@ -4,7 +4,7 @@ Title: Creates dynamic maps of danish administrative areas in Leaflet
 Version: 0.1.0
 Author: Mikkel Freltoft Krogsholm
 Maintainer: Mikkel Freltoft Krogsholm <mikkel@56n.dk>
-Description: 
+Description: Creates dynamic maps of danish administrative areas in Leaflet
 License: MIT
 LazyData: TRUE
 RoxygenNote: 5.0.1
