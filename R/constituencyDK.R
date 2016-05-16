@@ -4,6 +4,7 @@
 #' @param id is the name of the column in the data where the ids are stored
 #' @param subplot is a string of ids you want to keep - excludes all others
 #' @param data is the data frame that contains the data to map
+#' @param map is a TRUE / FALSE of wether a real map should be plotted underneath
 #'
 #' @return An interactive Leaflet map
 #'
@@ -26,7 +27,8 @@
 #'
 #' @export
 
-constituencyDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL){
+constituencyDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
+                           map = F, legend = F){
 
   require(leaflet)
 
@@ -70,21 +72,30 @@ constituencyDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL)
 
   shapefile <- subset(shapefile, !(is.na(shapefile$values)))
 
-  # Kortlægning ----
+  # Farve og popup ----
 
   colorscale = colorNumeric("YlOrRd", domain = NULL)
 
-  map <- leaflet(shapefile) %>%
-    addTiles %>%
+  data_popup <- paste0("<strong>", shapefile$name, "</strong>",
+                       "<br>", prettyNum(shapefile$values, big.mark = ".", decimal.mark = ","))
+
+  # Kortlægning ----
+
+  leafletmap <- leaflet(shapefile) %>%
     addPolygons(fillColor = ~colorscale(values),
                 fillOpacity = 0.8,
                 color = "000000",
-                stroke = F) %>%
-      addLegend("bottomright", pal = colorscale, values = ~values,
-                title = stringr::str_to_title(value),
-                labFormat = labelFormat(prefix = "",
-                                        big.mark = "."),
-                opacity = 1)
+                stroke = F,
+                popup = data_popup)
 
-  return(map)
+  if(legend == T) {
+    leafletmap <- addLegend(leafletmap, "bottomright", pal = colorscale, values = ~values,
+                            title = stringr::str_to_title(value),
+                            opacity = 1)
+  }
+
+  if(map == T) leafletmap <- addTiles(leafletmap)
+
+
+  return(leafletmap)
 }

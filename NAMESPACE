@@ -2,6 +2,7 @@
 
 export(constituencyDK)
 export(districtDK)
+export(getIDs)
 export(municipalityDK)
 export(regionalDK)
 export(ruralDK)

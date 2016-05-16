@@ -4,7 +4,8 @@
 \alias{districtDK}
 \title{Creates dynamic chloropleth maps of danish nominating districts}
 \usage{
-districtDK(value = NULL, id = NULL, subplot = NULL, data = NULL)
+districtDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
+  map = F, legend = F)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -14,6 +15,8 @@ districtDK(value = NULL, id = NULL, subplot = NULL, data = NULL)
 \item{subplot}{is a string of ids you want to keep - excludes all others}
 
 \item{data}{is the data frame that contains the data to map}
+
+\item{map}{is a TRUE / FALSE of wether a real map should be plotted underneath}
 }
 \value{
 An interactive Leaflet map
