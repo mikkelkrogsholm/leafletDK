@@ -15,7 +15,7 @@
 #' library(stringr)
 #'
 #' ejen4 <- read.csv2("http://api.statbank.dk/v1/data/EJEN4/CSV?OMR%C3%85DE=*&EJENDOMSKATE=2103&BN%C3%98GLE=2&OVERDRAG=1&Tid=2001",
-#'                    stringsAsFactors = F)
+#'                    stringsAsFactors = FALSE, encoding = "UTF-8")
 #'
 #' ejen4 <- ejen4 %>% select(OMRÅDE, TID, INDHOLD)
 #' ejen4 <- ejen4[str_detect(ejen4$OMRÅDE,"[A-ZÆØÅa-zæøå]"),]
@@ -29,7 +29,7 @@
 #' @export
 
 zipDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
-                  map = F, legend = F){
+                  map = FALSE, legend = FALSE){
 
   require(leaflet)
 
@@ -37,11 +37,16 @@ zipDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
 
   shapefile <- leafletDK::zip
 
+  # Fix possible encoding issues
+  shapefile$name <- fix_names_encoding(shapefile$name)
+  shapefile@data$name <- fix_names_encoding(shapefile@data$name)
+
   shapefile_data <- shapefile@data
 
   mapdata <- data
 
-  mapdata$joinID <- mapdata[, id]
+  mapdata$joinID <- fix_names_join(fix_names_encoding(mapdata[, id]))
+  mapdata$joinID <- as.integer(mapdata$joinID)
 
   names(mapdata)[which(names(mapdata) == value)] <- "values"
 

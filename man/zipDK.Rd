@@ -4,8 +4,8 @@
 \alias{zipDK}
 \title{Creates dynamic chloropleth maps of danish zip codes}
 \usage{
-zipDK(value = NULL, id = NULL, subplot = NULL, data = NULL, map = F,
-  legend = F)
+zipDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
+  map = FALSE, legend = FALSE)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -31,7 +31,7 @@ library(tidyr)
 library(stringr)
 
 ejen4 <- read.csv2("http://api.statbank.dk/v1/data/EJEN4/CSV?OMR\%C3\%85DE=*&EJENDOMSKATE=2103&BN\%C3\%98GLE=2&OVERDRAG=1&Tid=2001",
-                   stringsAsFactors = F)
+                   stringsAsFactors = FALSE, encoding = "UTF-8")
 
 ejen4 <- ejen4 \%>\% select(OMRÅDE, TID, INDHOLD)
 ejen4 <- ejen4[str_detect(ejen4$OMRÅDE,"[A-ZÆØÅa-zæøå]"),]
