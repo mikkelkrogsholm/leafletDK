@@ -5,7 +5,7 @@
 \title{Creates dynamic chloropleth maps of danish parishes}
 \usage{
 parishDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
-  map = F, legend = F)
+  map = FALSE, legend = FALSE)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -29,7 +29,7 @@ library(leafletDK)
 library(tidyr)
 
 km1 <- read.csv2("http://api.statbank.dk/v1/data/KM1/CSV?SOGN=*&FKMED=*",
-                 stringsAsFactors = F)
+                 stringsAsFactors = FALSE, encoding = "UTF-8")
 km1 <- km1 \%>\% spread(FKMED, INDHOLD)
 km1$pct <- round(km1[,4]/(km1[,3]+km1[,4])*100,1)
 
