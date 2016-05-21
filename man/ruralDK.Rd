@@ -4,8 +4,8 @@
 \alias{ruralDK}
 \title{Creates dynamic chloropleth maps of danish rural regions}
 \usage{
-ruralDK(value = NULL, id = NULL, subplot = NULL, data = NULL, map = F,
-  legend = F)
+ruralDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
+  map = FALSE, legend = FALSE)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -27,7 +27,7 @@ Creates dynamic chloropleth maps of danish rural regions
 \examples{
 library(leafletDK)
 aus08 <- read.csv2("http://api.statbank.dk/v1/data/AUS08/CSV?OMR\%C3\%85DE=01\%2C02\%2C03\%2C04\%2C05\%2C06\%2C07\%2C08\%2C09\%2C10\%2C11&SAESONFAK=9",
-                   stringsAsFactors = F)
+                   stringsAsFactors = FALSE, encoding = "UTF-8")
 aus08$OMRÅDE <- str_replace_all(aus08$OMRÅDE, "Landsdel ", "")
 
 ruralDK("INDHOLD", "OMRÅDE", data = aus08)
