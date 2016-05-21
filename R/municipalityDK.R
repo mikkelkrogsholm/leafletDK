@@ -12,7 +12,7 @@
 #' library(leafletDK)
 #'
 #' folk1 <- read.csv2("http://api.statbank.dk/v1/data/folk1/CSV?OMR%C3%85DE=*",
-#'                      stringsAsFactors = F)
+#'                      stringsAsFactors = FALSE, encoding = "UTF-8")
 #'
 #' municipalityDK("INDHOLD", "OMRÅDE", subplot = c("frederiksberg","hvidovre"), data = folk1)
 #'
@@ -26,6 +26,7 @@ municipalityDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
   # Kortdata ----
 
   shapefile <- leafletDK::municipal
+
   # Fix possible encoding issues
   shapefile$name <- fix_names_encoding(shapefile$name)
   shapefile@data$name <- fix_names_encoding(shapefile@data$name)
