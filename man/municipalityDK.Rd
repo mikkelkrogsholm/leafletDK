@@ -5,7 +5,7 @@
 \title{Creates dynamic chloropleth maps of danish municipalities}
 \usage{
 municipalityDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
-  map = F, legend = F)
+  map = FALSE, legend = FALSE)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -28,7 +28,7 @@ Creates dynamic chloropleth maps of danish municipalities
 library(leafletDK)
 
 folk1 <- read.csv2("http://api.statbank.dk/v1/data/folk1/CSV?OMR\%C3\%85DE=*",
-                     stringsAsFactors = F)
+                     stringsAsFactors = FALSE, encoding = "UTF-8")
 
 municipalityDK("INDHOLD", "OMRÅDE", subplot = c("frederiksberg","hvidovre"), data = folk1)
 

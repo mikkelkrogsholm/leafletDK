@@ -19,7 +19,7 @@
 #' @export
 
 municipalityDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
-                           map = F, legend = F){
+                           map = FALSE, legend = FALSE){
 
   require(leaflet)
 
