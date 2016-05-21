@@ -21,8 +21,6 @@
 municipalityDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
                            map = FALSE, legend = FALSE){
 
-  require(leaflet)
-
   # Kortdata ----
 
   shapefile <- leafletDK::municipal
