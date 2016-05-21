@@ -15,7 +15,7 @@
 #' library(stringr)
 #'
 #' fv15tot <- read.csv2("http://api.statbank.dk/v1/data/FV15TOT/CSV?VALRES=VAELG%2C13&OMR%C3%85DE=*",
-#'                      stringsAsFactors = F)
+#'                      stringsAsFactors = F, encoding = "UTF-8")
 #'
 #' fv15tot <- fv15tot %>% spread(VALRES, INDHOLD) %>% select(-TID)
 #' names(fv15tot) <- c("area", "writing", "voters")
@@ -28,7 +28,7 @@
 #' @export
 
 districtDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
-                       map = F, legend = F){
+                       map = FALSE, legend = FALSE){
 
   require(leaflet)
 
@@ -36,22 +36,15 @@ districtDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
 
   shapefile <- leafletDK::district
 
+  # Fix possible encoding issues
+  shapefile$name <- fix_names_encoding(shapefile$name)
+  shapefile@data$name <- fix_names_encoding(shapefile@data$name)
+
   shapefile_data <- shapefile@data
 
   mapdata <- data
 
-  # Fix names
-  fixNames <- function(x){
-    x <- tolower(x)
-    x <- gsub("æ", "ae", x)
-    x <- gsub("ø", "oe", x)
-    x <- gsub("å", "aa", x)
-    x <- gsub("-", "", x)
-    x <- gsub(" ", "", x)
-    return(x)
-  }
-
-  mapdata$joinID <- fixNames(mapdata[, id])
+  mapdata$joinID <- fix_names_join(fix_names_encoding(mapdata[, id]))
 
   names(mapdata)[which(names(mapdata) == value)] <- "values"
 
@@ -62,7 +55,7 @@ districtDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
   shapefile@data <- shapefile_data
 
   if(!(is.null(subplot))) {
-    subplot <- fixNames(subplot)
+    subplot <- fix_names_join(subplot)
     shapefile <- subset(shapefile, shapefile$joinID %in% subplot)
     }
 
