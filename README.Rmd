@@ -19,6 +19,8 @@ leafletDK is a package that makes it easy to create interactive dynamic leaflet 
 
 The package is heavily inspired by the amazing [mapDK](https://github.com/sebastianbarfort/mapDK) package by [Sebastian Barfort](https://twitter.com/sbarfort), which I recommend if you want to create static high quality maps.
 
+Also a special thanks to [Kenneth Rose](https://twitter.com/kennethrose82) for fixing encoding issues on Windows! (I wrote the original package on Linux, where shit just work).
+
 ## Getting started
 
 First you need to install the package from github. You do this by running:

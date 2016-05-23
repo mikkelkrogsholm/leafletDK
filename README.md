@@ -9,6 +9,8 @@ leafletDK is a package that makes it easy to create interactive dynamic leaflet 
 
 The package is heavily inspired by the amazing [mapDK](https://github.com/sebastianbarfort/mapDK) package by [Sebastian Barfort](https://twitter.com/sbarfort), which I recommend if you want to create static high quality maps.
 
+Also a special thanks to [Kenneth Rose](https://twitter.com/kennethrose82) for fixing encoding issues on Windows! (I wrote the original package on Linux, where shit just work).
+
 Getting started
 ---------------
 
@@ -25,7 +27,7 @@ First we load the package and get the most recent population count for Denmark v
     library(leafletDK)
 
     folk1 <- read.csv2("http://api.statbank.dk/v1/data/folk1/CSV?OMR%C3%85DE=*",
-                       stringsAsFactors = F)
+                       stringsAsFactors = FALSE, encoding = "UTF-8")
 
 Now we have a data frame with three columns. "OMRÅDE" is the area, "TID" is time/date and "INDHOLD" is the people count. We will use the "OMRÅDE" and "INDHOLD" columns to call the municipalityDK function.
 
