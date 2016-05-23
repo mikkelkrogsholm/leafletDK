@@ -7,10 +7,12 @@ Maintainer: Mikkel Freltoft Krogsholm <mikkel@56n.dk>
 Description: Creates dynamic maps of danish administrative areas in Leaflet
 License: MIT
 LazyData: TRUE
+Encoding: UTF-8
 RoxygenNote: 5.0.1
+Depends:
+    leaflet
 Imports:
     dplyr,
-    leaflet,
     stringr,
     sp
 Suggests: knitr,

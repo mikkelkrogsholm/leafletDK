@@ -5,7 +5,7 @@
 \title{Creates dynamic chloropleth maps of danish constituencies}
 \usage{
 constituencyDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
-  map = F, legend = F)
+  map = FALSE, legend = FALSE)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -31,7 +31,7 @@ library(tidyr)
 library(stringr)
 
 fv15tot <- read.csv2("http://api.statbank.dk/v1/data/FV15TOT/CSV?VALRES=VAELG\%2C13&OMR\%C3\%85DE=*",
-                     stringsAsFactors = F)
+                     stringsAsFactors = FALSE, encoding = "UTF-8")
 
 fv15tot <- fv15tot \%>\% spread(VALRES, INDHOLD) \%>\% select(-TID)
 names(fv15tot) <- c("area", "writing", "voters")

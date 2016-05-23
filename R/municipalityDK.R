@@ -12,37 +12,28 @@
 #' library(leafletDK)
 #'
 #' folk1 <- read.csv2("http://api.statbank.dk/v1/data/folk1/CSV?OMR%C3%85DE=*",
-#'                      stringsAsFactors = F)
+#'                      stringsAsFactors = FALSE, encoding = "UTF-8")
 #'
 #' municipalityDK("INDHOLD", "OMRÅDE", subplot = c("frederiksberg","hvidovre"), data = folk1)
 #'
 #' @export
 
 municipalityDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
-                           map = F, legend = F){
-
-  require(leaflet)
+                           map = FALSE, legend = FALSE){
 
   # Kortdata ----
 
   shapefile <- leafletDK::municipal
 
+  # Fix possible encoding issues
+  shapefile$name <- fix_names_encoding(shapefile$name)
+  shapefile@data$name <- fix_names_encoding(shapefile@data$name)
+
   shapefile_data <- shapefile@data
 
   mapdata <- data
 
-  # Fix names
-  fixNames <- function(x){
-    x <- tolower(x)
-    x <- gsub("æ", "ae", x)
-    x <- gsub("ø", "oe", x)
-    x <- gsub("å", "aa", x)
-    x <- gsub("-", "", x)
-    x <- gsub(" ", "", x)
-    return(x)
-  }
-
-  mapdata$joinID <- fixNames(mapdata[, id])
+  mapdata$joinID <- fix_names_join(fix_names_encoding(mapdata[, id]))
 
   names(mapdata)[which(names(mapdata) == value)] <- "values"
 
@@ -53,7 +44,7 @@ municipalityDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
   shapefile@data <- shapefile_data
 
   if(!(is.null(subplot))) {
-    subplot <- fixNames(subplot)
+    subplot <- fix_names_join(subplot)
     shapefile <- subset(shapefile, shapefile$joinID %in% subplot)
     }
 

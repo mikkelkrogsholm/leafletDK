@@ -13,38 +13,28 @@
 #' library(tidyr)
 #'
 #' km1 <- read.csv2("http://api.statbank.dk/v1/data/KM1/CSV?SOGN=*&FKMED=*",
-#'                  stringsAsFactors = F)
+#'                  stringsAsFactors = FALSE, encoding = "UTF-8")
 #' km1 <- km1 %>% spread(FKMED, INDHOLD)
 #' km1$pct <- round(km1[,4]/(km1[,3]+km1[,4])*100,1)
 #'
 #' parishDK("pct", "SOGN", data = km1)
 #'
-
 parishDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
-                     map = F, legend = F){
-
-  require(leaflet)
+                     map = FALSE, legend = FALSE){
 
   # Kortdata ----
 
   shapefile <- leafletDK::parish
 
+  # Fix possible encoding issues
+  shapefile$name <- fix_names_encoding(shapefile$name)
+  shapefile@data$name <- fix_names_encoding(shapefile@data$name)
+
   shapefile_data <- shapefile@data
 
   mapdata <- data
 
-  # Fix names
-  fixNames <- function(x){
-    x <- tolower(x)
-    x <- gsub("æ", "ae", x)
-    x <- gsub("ø", "oe", x)
-    x <- gsub("å", "aa", x)
-    x <- gsub("-", "", x)
-    x <- gsub(" ", "", x)
-    return(x)
-  }
-
-  mapdata$joinID <- fixNames(mapdata[, id])
+  mapdata$joinID <- fix_names_join(fix_names_encoding(mapdata[, id]))
   mapdata$joinID <- stringr::str_replace_all(mapdata$joinID, "\\d+", "")
 
   names(mapdata)[which(names(mapdata) == value)] <- "values"
@@ -58,7 +48,7 @@ parishDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
   shapefile@data <- shapefile_data
 
   if(!(is.null(subplot))) {
-    subplot <- fixNames(subplot)
+    subplot <- fix_names_join(subplot)
     shapefile <- subset(shapefile, shapefile$joinID %in% subplot)
     }
 
