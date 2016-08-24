@@ -5,7 +5,7 @@
 \title{Creates dynamic chloropleth maps of danish parishes}
 \usage{
 parishDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
-  map = FALSE, legend = FALSE)
+  map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -26,12 +26,15 @@ Creates dynamic chloropleth maps of danish parishes
 }
 \examples{
 library(leafletDK)
-library(tidyr)
 
-km1 <- read.csv2("http://api.statbank.dk/v1/data/KM1/CSV?SOGN=*&FKMED=*",
-                 stringsAsFactors = FALSE, encoding = "UTF-8")
-km1 <- km1 \%>\% spread(FKMED, INDHOLD)
-km1$pct <- round(km1[,4]/(km1[,3]+km1[,4])*100,1)
+km1 <- readr::read_csv2("http://api.statbank.dk/v1/data/KM1/CSV?SOGN=*&FKMED=*")
+km1 <- tidyr::spread(km1, FKMED, INDHOLD)
+km1$SOGN <- stringr::str_trim(stringr::str_replace_all(km1$SOGN, "(\\\\d+)|([-])", ""))
+km1 <- dplyr::group_by(km1, SOGN)
+km1 <- dplyr::summarise(km1,
+                        medlem = sum(`Medlem af Folkekirken`, na.rm = T),
+                        ikke_medlem = sum(`Ikke medlem af Folkekirken`, na.rm = T))
+km1 <- dplyr::mutate(km1, pct = medlem/(ikke_medlem + medlem), pct = round(pct*100,2))
 
 parishDK("pct", "SOGN", data = km1)
 

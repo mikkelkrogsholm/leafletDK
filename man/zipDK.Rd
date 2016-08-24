@@ -5,7 +5,7 @@
 \title{Creates dynamic chloropleth maps of danish zip codes}
 \usage{
 zipDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
-  map = FALSE, legend = FALSE)
+  map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -26,19 +26,15 @@ Creates dynamic chloropleth maps of danish zip codes
 }
 \examples{
 library(leafletDK)
-library(dplyr)
-library(tidyr)
-library(stringr)
 
-ejen4 <- read.csv2("http://api.statbank.dk/v1/data/EJEN4/CSV?OMR\%C3\%85DE=*&EJENDOMSKATE=2103&BN\%C3\%98GLE=2&OVERDRAG=1&Tid=2001",
-                   stringsAsFactors = FALSE, encoding = "UTF-8")
+ejen4 <- readr::read_csv2("http://api.statbank.dk/v1/data/EJEN4/CSV?OMR\%C3\%85DE=*&EJENDOMSKATE=2103&BN\%C3\%98GLE=2&OVERDRAG=1&Tid=2001")
 
-ejen4 <- ejen4 \%>\% select(OMRÅDE, TID, INDHOLD)
-ejen4 <- ejen4[str_detect(ejen4$OMRÅDE,"[A-ZÆØÅa-zæøå]"),]
-ejen4$zip <- unlist(str_extract_all(ejen4$OMRÅDE, "\\\\d{4}"))
+ejen4 <- dplyr::select(ejen4, OMRÅDE, TID, INDHOLD)
+ejen4 <- ejen4[stringr::str_detect(ejen4$OMRÅDE,"[A-ZÆØÅa-zæøå]"),]
+ejen4$zip <- unlist(stringr::str_extract_all(ejen4$OMRÅDE, "\\\\d{4}"))
 ejen4$zip <- ifelse(as.numeric(ejen4$zip) < 2400, round(as.numeric(ejen4$zip)/100)*100, as.numeric(ejen4$zip))
-ejen4 <- ejen4 \%>\% group_by(zip) \%>\% summarise(indhold = sum(INDHOLD))
-ejen4 <- as.data.frame(ejen4)
+ejen4 <- dplyr::group_by(ejen4, zip)
+ejen4 <- dplyr::summarise(ejen4, indhold = sum(INDHOLD))
 
 zipDK("indhold", "zip", data = ejen4)
 

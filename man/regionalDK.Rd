@@ -5,7 +5,7 @@
 \title{Creates dynamic chloropleth maps of danish regions}
 \usage{
 regionalDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
-  map = FALSE, legend = FALSE)
+  map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -27,8 +27,7 @@ Creates dynamic chloropleth maps of danish regions
 \examples{
 library(leafletDK)
 
-folk1 <- read.csv2("http://api.statbank.dk/v1/data/folk1/CSV?OMR\%C3\%85DE=*",
-                     stringsAsFactors = FALSE, encoding = "UTF-8")
+folk1 <- readr::read_csv2("http://api.statbank.dk/v1/data/folk1a/CSV?OMR\%C3\%85DE=*")
 
 regionalDK("INDHOLD", "OMRÅDE", subplot = c("Region Nordjylland","Region Syddanmark", "Region Sjælland"), data = folk1)
 

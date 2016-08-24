@@ -17,6 +17,14 @@ knitr::opts_chunk$set(
 
 leafletDK is a package that makes it easy to create interactive dynamic leaflet maps based on danish administrative areas.
 
+You can map      
+ - municipalities with `municipalityDK()`     
+ - regions with `regionalDK()`     
+ - rural areas with `ruralDK()`     
+ - zip codes with `zipdDK()`     
+ - political constituencies with `constituencyDK()`     
+ - political districts with `districtsDK()`     
+
 The package is heavily inspired by the amazing [mapDK](https://github.com/sebastianbarfort/mapDK) package by [Sebastian Barfort](https://twitter.com/sbarfort), which I recommend if you want to create static high quality maps.
 
 Also a special thanks to [Kenneth Rose](https://twitter.com/kennethrose82) for fixing encoding issues on Windows! (I wrote the original package on Linux, where shit just work).
@@ -38,8 +46,7 @@ First we load the package and get the most recent population count for Denmark v
 ```
 library(leafletDK)
 
-folk1 <- read.csv2("http://api.statbank.dk/v1/data/folk1/CSV?OMR%C3%85DE=*",
-                   stringsAsFactors = FALSE, encoding = "UTF-8")
+folk1 <- readr::read_csv2("http://api.statbank.dk/v1/data/folk1a/CSV?OMR%C3%85DE=*")
 ```
 
 Now we have a data frame with three columns. "OMRÅDE" is the area, "TID" is time/date and "INDHOLD" is the people count. We will use the "OMRÅDE" and "INDHOLD" columns to call the municipalityDK function.
@@ -74,6 +81,21 @@ municipalityDK("INDHOLD", "OMRÅDE",
 
 
 This generates a map with only our three chosen municipalities. If you click on one of the areas, a little popup appears with the mapped values.
+
+## Coloring the map
+If you are not happy with the standard colorpalette (Red and Yellows) then you can change it with the `pal` argument. You can use any of the palette names in the overview below.
+
+![](nonpackage/brewer_swatches.png)
+
+As we saw above, Copenhagen municipality has a lot of people. That means that the area "eats up" most of the color so to say. We can change this by setting the `logcol` argument to `TRUE`. By doing this we use the log value to color by and not the real value.  
+
+Lets try it. Lets map the data again but this time we set the colors to "Blues" and we use the log value to color by.
+
+```
+municipalityDK("INDHOLD", "OMRÅDE", data = folk1, pal = "Blues", logcol = T)
+```
+
+![](nonpackage/readme_plot4.png)
 
 ## Getting ids
 If you are in doubt of what ids are being used to generate the maps, then you can use the `getIDs` function to see a list. If we want to get a list of the municipalities we will do the following:

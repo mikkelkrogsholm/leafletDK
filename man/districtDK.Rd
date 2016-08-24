@@ -5,7 +5,7 @@
 \title{Creates dynamic chloropleth maps of danish nominating districts}
 \usage{
 districtDK(value = NULL, id = NULL, subplot = NULL, data = NULL,
-  map = FALSE, legend = FALSE)
+  map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F)
 }
 \arguments{
 \item{value}{is the name of the column in the data where the values are stored}
@@ -26,18 +26,15 @@ Creates dynamic chloropleth maps of danish nominating districts
 }
 \examples{
 library(leafletDK)
-library(dplyr)
-library(tidyr)
-library(stringr)
 
-fv15tot <- read.csv2("http://api.statbank.dk/v1/data/FV15TOT/CSV?VALRES=VAELG\%2C13&OMR\%C3\%85DE=*",
-                     stringsAsFactors = F, encoding = "UTF-8")
-
-fv15tot <- fv15tot \%>\% spread(VALRES, INDHOLD) \%>\% select(-TID)
+fv15tot <- readr::read_csv2("http://api.statbank.dk/v1/data/FV15TOT/CSV?VALRES=VAELG\%2C13&OMR\%C3\%85DE=*")
+fv15tot <- tidyr::spread(fv15tot, VALRES, INDHOLD)
+fv15tot <- dplyr::select(fv15tot, -TID)
 names(fv15tot) <- c("area", "writing", "voters")
-fv15tot <- fv15tot \%>\% mutate(pertenthousand = writing/(voters/10000))
-fv15tot <- fv15tot \%>\% filter(str_detect(fv15tot$area, "OPSTILLINGSKREDS")) \%>\%
-  mutate(area = str_to_lower(str_replace_all(area, "( OPSTILLINGSKREDS)|(\\\\d+[.] )", "")))
+fv15tot <- dplyr::mutate(fv15tot, pertenthousand = writing/(voters/10000))
+
+fv15tot <- dplyr::filter(fv15tot, stringr::str_detect(fv15tot$area, "OPSTILLINGSKREDS"))
+fv15tot <- dplyr::mutate(fv15tot, area = stringr::str_to_lower(stringr::str_replace_all(area, "( OPSTILLINGSKREDS)|(\\\\d+[.] )", "")))
 
 districtDK("pertenthousand", "area", data = fv15tot)
 
