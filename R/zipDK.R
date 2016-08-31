@@ -8,6 +8,7 @@
 #' @param legend is a TRUE / FALSE of wether the legend should be plotted
 #' @param pal is the color palette for the chloropleth
 #' @param logcol is a TRUE / FALSE of wether the chloropleth colors should be drawn against the log value
+#' @param legendtitle provides an alternative title for the legend
 #'
 #' @return An interactive Leaflet map
 #'
@@ -28,7 +29,8 @@
 #' @export
 
 zipDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
-                  map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F){
+                  map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F,
+                  legendtitle = NULL){
 
   # Kortdata ----
 
@@ -38,7 +40,10 @@ zipDK <- function(value = NULL, id = NULL, subplot = NULL, data = NULL,
 
   # Kortlægning
 
-  leafletmap <- map_it(shapefile, map = map, legend = legend, pal = pal, logcol = logcol)
+  if(is.null(legendtitle)) legendtitle <- value
+
+  leafletmap <- map_it(shapefile, map = map, legend = legend, pal = pal, logcol = logcol, legendtitle = legendtitle)
+
 
   return(leafletmap)
 }

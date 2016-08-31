@@ -65,7 +65,7 @@ join_map_data_zip <- function(value = NULL, id = NULL, subplot = NULL, mapdata =
 
 ################
 
-map_it <- function(shapefile, map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F){
+map_it <- function(shapefile, map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F, legendtitle = ""){
 
   colorscale = colorNumeric(pal, domain = NULL)
 
@@ -83,7 +83,7 @@ map_it <- function(shapefile, map = FALSE, legend = FALSE, pal = "YlOrRd", logco
 
   if(legend == T) {
     leafletmap <- addLegend(leafletmap, "bottomright", pal = colorscale, values = ~values,
-                            title = stringr::str_to_title(value),
+                            title = stringr::str_to_title(legendtitle),
                             opacity = 1)
   }
 
