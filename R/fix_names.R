@@ -1,5 +1,3 @@
-
-
 #' Helper function.
 fix_names_encoding <- function(x) {
   x <- gsub("Ã¦", "æ", x)

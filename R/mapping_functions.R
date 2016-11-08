@@ -1,3 +1,4 @@
+#' Helper function
 join_map_data <- function(value = NULL, id = NULL, subplot = NULL, mapdata = NULL, shapefile){
 
   # Fix possible encoding issues
@@ -12,7 +13,7 @@ join_map_data <- function(value = NULL, id = NULL, subplot = NULL, mapdata = NUL
 
   mapdata <- mapdata[,c("values", "joinID")]
 
-  shapefile_data <- dplyr::left_join(shapefile_data, mapdata)
+  shapefile_data <- dplyr::left_join(shapefile_data, mapdata, by = "joinID")
 
   shapefile@data <- shapefile_data
 
@@ -32,6 +33,7 @@ join_map_data <- function(value = NULL, id = NULL, subplot = NULL, mapdata = NUL
 
 ################
 
+#' Helper function
 join_map_data_zip <- function(value = NULL, id = NULL, subplot = NULL, mapdata = NULL, shapefile){
 
   # Fix possible encoding issues
@@ -46,7 +48,7 @@ join_map_data_zip <- function(value = NULL, id = NULL, subplot = NULL, mapdata =
 
   mapdata <- mapdata[,c("values", "joinID")]
 
-  shapefile_data <- dplyr::left_join(shapefile_data, mapdata)
+  shapefile_data <- dplyr::left_join(shapefile_data, mapdata, by = "joinID")
 
   shapefile@data <- shapefile_data
 
@@ -56,7 +58,7 @@ join_map_data_zip <- function(value = NULL, id = NULL, subplot = NULL, mapdata =
 
   missingnames <- unique(shapefile$name[is.na(shapefile$values)])
 
-  if(length(missingnames) != 0){print(paste0("Missing values for ", missingnames))}
+  if(length(missingnames) != 0){message(paste0("Missing values for ", missingnames, "\n"))}
 
   # shapefile <- subset(shapefile, !(is.na(shapefile$values)))
 
@@ -65,6 +67,7 @@ join_map_data_zip <- function(value = NULL, id = NULL, subplot = NULL, mapdata =
 
 ################
 
+#' Helper function
 map_it <- function(shapefile, map = FALSE, legend = FALSE, pal = "YlOrRd", logcol = F, legendtitle = ""){
 
   colorscale = colorNumeric(pal, domain = NULL)
